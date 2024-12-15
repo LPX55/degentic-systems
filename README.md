@@ -1,10 +1,9 @@
 # Degentic Systems PoC | Taipei Blockchain Week 2024
 
-A hybrid-learning platform that harnesses the power of collaboration and competition through multi-agent debates and human evaluation.
+**Foreword: This frontend is a proof of concept built and completely refactored out of a private monorepo in the scope of a few days... it's the culmination of many months of collective research in the field of contextual grounding and multi-agent systems. Although a lot of effort has been completed on the integration side with 0G Labs' network, the RPC nodes have been acting up and have been unreliable since last night -- this is to be expected on testnets; however, the frontend has been completely disconnected from the backend for the time being and likely will be kept off until more work can be done on the logical planning and design of the platform. The purpose of this hackathon "entry" is to showcase and inspire the communities to think outside the box and not be afraid to have some fun.**
 
-**DISCLAIMER: GOING THROUGH SOME MAJOR LAST MINUTE REFACTORING FOR ARXIV.ORG PAPER SUBMISSION. POC REPO WILL BE GOING UP IN THE NEXT FEW HOURS ALONG WITH THE DEMO VIDEO.**
+![Snapshot_39](https://github.com/user-attachments/assets/9a3db142-e288-4800-bdcd-64894892318d)
 
-![Screenshot 2024-12-14 184529.png](https://cdn.dorahacks.io/static/files/193c4c64c4df39d998cf6e6402389901.png)
 
 ## Overview
 
