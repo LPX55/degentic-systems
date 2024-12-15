@@ -1,0 +1,44 @@
+{
+  "name": "degentic-contracts",
+  "version": "0.1.2",
+  "description": "Deterministic contracts for the OP Superchain",
+  "license": "MIT",
+  "tags": "OP Superchain, 0G.ai, solidity, crosschain, l2resolver, CCIP, Offchain Resolver, op stack, hardhat, ethers",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "build": "npx hardhat build",
+    "deploy-all": "npx hardhat superchain-deploy --path scripts/deploy.js",
+    "deploy-sepolia": "npx hardhat deploy --path scripts/deploy.js --network sepolia",
+    "deploy-zero-g": "npx hardhat deploy --path scripts/deploy.js --network zeroGTestnet",
+    "thirdweb-deploy": "npx thirdweb@latest deploy",
+    "publish": "npx thirdweb@latest publish"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.1",
+    "@nomicfoundation/hardhat-ethers": "^3.0.4",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomicfoundation/hardhat-verify": "^1.1.0",
+    "@typechain/ethers-v6": "^0.4.3",
+    "@typechain/hardhat": "^8.0.3",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.7",
+    "ethers": "^6.13.4",
+    "hardhat": "^2.17.1",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.4",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.3.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "@thirdweb-dev/contracts": "^3.8.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.3.1",
+    "hardhat-change-network": "^0.0.7",
+    "prompt-sync": "^4.2.0",
+    "readline": "^1.3.0"
+  }
+}
