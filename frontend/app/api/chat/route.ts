@@ -12,6 +12,8 @@ const SERVICE_NAME = "chat-provider-1";
 let openai = new OpenAI({ apiKey: "" });
 let broker: ZGServingNetworkBroker;
 let service: ServiceStructOutput;
+let cachedServices: { services: ServiceStructOutput[]; timestamp: number } | null = null; // Cache Services List
+const CACHE_EXPIRATION_TIME = 5 * 60 * 1000; // WARNING: MIGHT NOT BE A GOOD IDEA FOR PRODUCTION ENVIORNMENTS
 
 async function init0g() {
   const provider = new ethers.JsonRpcProvider("https://evmrpc-testnet.0g.ai");
@@ -20,12 +22,20 @@ async function init0g() {
   try {
     broker = await createZGServingNetworkBroker(wallet);
     console.log("Listing available services...");
-    const services = await broker.listService();
-    for (const service of services) {
+
+    const currentTime = Date.now(); 
+    if (!cachedServices || (currentTime - cachedServices.timestamp) > CACHE_EXPIRATION_TIME) {
+      cachedServices = {
+        services: await broker.listService(), // Fetch and cache services
+        timestamp: currentTime, // Store the current time
+      };
+    }
+
+    for (const service of cachedServices.services) { // Using cached services only for testnet dev purposes
       console.log(`Service: ${service.name}, Provider: ${service.provider}, Type: ${service.serviceType}, Model: ${service.model}, URL: ${service.url}`);
     }
 
-    const foundService = services.find((service: ServiceStructOutput) => service.name === SERVICE_NAME);
+    const foundService = cachedServices.services.find((service: ServiceStructOutput) => service.name === SERVICE_NAME);
     if (!foundService) {
       console.error("Service not found.");
       return;
@@ -33,18 +43,27 @@ async function init0g() {
     service = foundService;
     const providerAddress = service.provider;
 
-    const initialBalance = 0.00000001;
-    // Only needed for the first time
+    let account = null;
     try {
-      console.log("Creating a new account...");
-      await broker.addAccount(providerAddress, initialBalance);
-      console.log("Account created successfully.");
+      account = await broker.getAccount(providerAddress);
+      console.log(account);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching account:", error);
     }
 
-    const account = await broker.getAccount(providerAddress);
-    console.log(account);
+    if (!account) {
+      const initialBalance = 0.00000001;
+      // Only needed for the first time
+      try {
+        console.log("Creating a new account...");
+        await broker.addAccount(providerAddress, initialBalance);
+        console.log("Account created successfully.");
+        account = await broker.getAccount(providerAddress); // Fetch the account again after creation
+        console.log(account);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   } catch (error) {
     console.error("Error during execution:", error);
   }
