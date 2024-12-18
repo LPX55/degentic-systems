@@ -1,8 +1,8 @@
 // app/api/chat/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { ethers } from 'ethers';
-import { createZGServingNetworkBroker, ZGServingNetworkBroker, ServiceStructOutput } from '@0glabs/0g-serving-broker';
+import { createZGServingNetworkBroker, type ZGServingNetworkBroker, type ServiceStructOutput } from '@0glabs/0g-serving-broker';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -21,11 +21,11 @@ async function init0g() {
     broker = await createZGServingNetworkBroker(wallet);
     console.log("Listing available services...");
     const services = await broker.listService();
-    services.forEach((service: any) => {
+    for (const service of services) {
       console.log(`Service: ${service.name}, Provider: ${service.provider}, Type: ${service.serviceType}, Model: ${service.model}, URL: ${service.url}`);
-    });
+    }
 
-    const foundService = services.find((service: any) => service.name === SERVICE_NAME);
+    const foundService = services.find((service: ServiceStructOutput) => service.name === SERVICE_NAME);
     if (!foundService) {
       console.error("Service not found.");
       return;
@@ -34,6 +34,7 @@ async function init0g() {
     const providerAddress = service.provider;
 
     const initialBalance = 0.00000001;
+    // Only needed for the first time
     try {
       console.log("Creating a new account...");
       await broker.addAccount(providerAddress, initialBalance);
@@ -57,7 +58,8 @@ export async function GET(req: NextRequest) {
   const providerAddress = service.provider;
   console.log("Processing a request...");
   const serviceName = service.name;
-  const content = req.nextUrl.searchParams.get('q') || "What is the capital of Germany?";
+  const systemPrompt = req.nextUrl.searchParams.get('i') || "You are a helpful assistant, respond to the best of your ability.";
+  const content = `### INSTRUCTIONS: ${systemPrompt}\n\n### RESPOND TO THE FOLLOWING: ${req.nextUrl.searchParams.get('q') || "Who is Satoshi Nakamoto?"}`;
 
   const { endpoint, model } = await broker.getServiceMetadata(providerAddress, serviceName);
   console.log("fetching headers");
@@ -68,7 +70,12 @@ export async function GET(req: NextRequest) {
 
   try {
     completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content }],
+      messages: [
+        {
+          role: "user",
+          content: content,
+        }
+      ],
       model: model,
     }, {
       headers: { ...headers },
@@ -90,7 +97,12 @@ export async function GET(req: NextRequest) {
     console.log("finally", completion);
     if (completion === undefined) {
       completion = await openai.chat.completions.create({
-        messages: [{ role: "system", content }],
+        messages: [
+          {
+            role: "user",
+            content: content,
+          }
+        ],
         model: model,
       }, {
         headers: { ...headers },
@@ -99,7 +111,8 @@ export async function GET(req: NextRequest) {
   }
 
   if (completion === undefined || completion.choices === undefined) {
-    return new NextResponse("0g provider is having issues :(", { status: 500 });
+    const errorMessage = completion?.object || "Provider error.";
+    return new NextResponse(errorMessage, { status: 500 });
   }
 
   const receivedContent = completion.choices[0].message.content;
