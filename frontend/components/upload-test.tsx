@@ -1,54 +1,47 @@
-import React, { useState } from 'react';
-import { ethers } from 'ethers';
+'use client';
 
-const FileUpload: React.FC = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+import type { PutBlobResult } from '@vercel/blob';
+import { useState, useRef } from 'react';
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    setSelectedFile(file || null);
-  };
+export default function FileUpload() {
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
-
-    try {
-      // Request wallet connection
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('address', await signer.getAddress());
-
-      const response = await fetch('/api/storage/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUploadStatus(`File uploaded successfully. Root Hash: ${data.rootHash}`);
-      } else {
-        const error = await response.json();
-        setUploadStatus(`Upload failed: ${error.error}`);
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus('File upload failed. Please ensure your wallet is connected.');
+    if (!inputFileRef.current?.files) {
+      throw new Error('No file selected');
     }
+
+    const file = inputFileRef.current.files[0];
+
+    const response = await fetch('/api/storage/upload', {
+      method: 'POST',
+      body: file,
+    });
+
+    const newBlob = (await response.json()) as PutBlobResult;
+
+    setBlob(newBlob);
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload} disabled={!selectedFile}>
-        Upload
-      </button>
-      {uploadStatus && <p>{uploadStatus}</p>}
-    </div>
-  );
-};
+    <>
+      <h1>Upload Your File</h1>
 
-export default FileUpload;
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          handleUpload();
+        }}
+      >
+        <input name="file" ref={inputFileRef} type="file" required />
+        <button type="submit">Upload</button>
+      </form>
+      {blob && (
+        <div>
+          Blob url: <a href={blob.url}>{blob.url}</a>
+        </div>
+      )}
+    </>
+  );
+}

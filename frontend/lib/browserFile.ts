@@ -37,7 +37,7 @@ abstract class AbstractFile {
         throw new Error('Method not implemented.');
     }
 
-    async createSubmission(tags: BytesLike): Promise<[any | null, Error | null]> {
+    async createSubmission(tags: BytesLike): Promise<[any, Error | null]> {
         throw new Error('Method not implemented.');
     }
 
@@ -129,13 +129,13 @@ export class BrowserFile extends AbstractFile {
         return Math.ceil(this.file.size / CHUNK_SIZE);
     }
 
-    async createSubmission(tags: BytesLike): Promise<[any | null, Error | null]> {
+    async createSubmission(tags: BytesLike): Promise<[any, Error | null]> {
         try {
             const [tree, err] = await this.merkleTree();
             if (err) return [null, err];
             
             return [{
-                root: tree!.rootHash(),
+                root: tree.rootHash(),
                 size: this.size(),
                 tags: ethers.hexlify(tags),
                 segments: this.numSegments(),

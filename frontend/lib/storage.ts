@@ -1,11 +1,12 @@
 import { ZgFile, Indexer, getFlowContract } from '@0glabs/0g-ts-sdk';
 import { getWallet } from './wallet';
 import { BrowserFile } from './browserFile';
-import { ethers } from 'ethers';
-import { FileHandle } from 'fs/promises';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import { ethers, JsonRpcProvider } from 'ethers';
+import { FileHandle } from 'node:fs/promises';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
+import { put } from '@vercel/blob';
 
 const turbo = true;
 const indRpc = process.env.NEXT_PUBLIC_INDEXER_URL || "";
@@ -23,12 +24,13 @@ export async function storageParams() {
     if (typeof window !== 'undefined' && window.ethereum) {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
+      
       const flowContract = getFlowContract(flowAddr, signer);
       const indexer = new Indexer(indRpc);
       storageInstance = { flowContract, indexer };
     } else {
       // Fallback for server-side
-      const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_EVM_RPC);
+      const provider = new JsonRpcProvider(process.env.NEXT_PUBLIC_EVM_RPC);
       const signer = new ethers.Wallet(process.env.NEXT_PUBLIC_FUNDER_PRIVATE_KEY || '', provider);
       const flowContract = getFlowContract(flowAddr, signer);
       const indexer = new Indexer(indRpc);
@@ -55,36 +57,43 @@ export async function getFileRootHash(filePath: string) {
 }
 
 /**
- * Uploads data to 0G storage.
+ * Uploads data to Vercel Blob Storage, then 0G storage.
  */
 export async function uploadData(file: File) {
   try {
     const client = await storageParams();
     const evmRpc = process.env.NEXT_PUBLIC_EVM_RPC || 'https://evmrpc-testnet.0g.ai';
-    
-    // Create a temporary file path and handle
+
+    // Upload file to Vercel Blob Storage
+    const blob = await put(file.name, file, {
+      access: 'public',
+      token: process.env.DEGENTIC_READ_WRITE_TOKEN,
+    });
+
+    // Create a temporary file path
     const tempFilePath = path.join(os.tmpdir(), file.name);
-    const blob = new Blob([file], { type: file.type });
-    const arrayBuffer = await blob.arrayBuffer();
+
+    // Download the blob to the temporary file path
+    const response = await fetch(blob.url);
+    const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     fs.writeFileSync(tempFilePath, buffer);
-    
-    // Create ZgFile from file handle
-    const fileHandle = await fs.promises.open(tempFilePath, 'r');
-    const zgFile = await ZgFile.fromNodeFileHandle(fileHandle);
+
+    // Create ZgFile from the temporary file path
+    const zgFile = await ZgFile.fromFilePath(tempFilePath);
     console.log("fileSize", zgFile.size());
-    
+
     const [tree, treeErr] = await zgFile.merkleTree();
     if (treeErr) {
       console.error("Error getting merkle tree:", treeErr);
       return { error: treeErr };
     }
-    
+
     const rootHash = tree?.rootHash();
     console.log("Root hash:", rootHash);
-    
-    let tx: any;
-    let err: any;
+
+    let tx;
+    let err;
     try {
       [tx, err] = await client.indexer.upload(zgFile, 0, evmRpc, client.signer, flowAddr);
       if (err) {
@@ -97,8 +106,12 @@ export async function uploadData(file: File) {
         return { error: 'Upload failed due to unsupported operation. Please check your contract runner configuration.' };
       }
       throw error;
+    } finally {
+      // Close the ZgFile and remove the temporary file
+      await zgFile.close();
+      fs.unlinkSync(tempFilePath);
     }
-    
+
     return { rootHash: rootHash, tx: tx };
   } catch (error) {
     console.error("Upload error:", error);
