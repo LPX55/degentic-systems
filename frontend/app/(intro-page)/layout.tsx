@@ -5,7 +5,7 @@ const navigationItems = [
   { title: "Home", href: "/" },
   { title: "Ideology", href: "/#ethos" },
   { title: "Features", href: "/#features" },
-  { title: "Github", href: "https://github.com/LPX55", external: true },
+  { title: "Github", href: "https://github.com/LPX55/degentic-systems", external: true },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

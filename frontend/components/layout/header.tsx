@@ -7,6 +7,7 @@ import { MobileMenuButton } from './mobile-menu-button';
 import { MobileNav } from './mobile-nav';
 import { ColorModeSwitcher } from '../color-mode-switcher';
 import { TW } from '@/components/connect/connect-btn';
+import { AuthButton } from '@/components/connect/auth-btn';
 interface HeaderProps {
   items?: {
     title: string;
@@ -37,7 +38,8 @@ export function Header({ items }: HeaderProps) {
           )}
         </div>
         <div className="flex gap-4 items-center">
-          <ColorModeSwitcher /> <TW />
+          <ColorModeSwitcher /> 
+          <AuthButton />
         </div>
       </div>
     </header>

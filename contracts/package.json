@@ -33,9 +33,11 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@dev/dynamic-contracts": "npm:@thirdweb-dev/dynamic-contracts@1.2.5",
     "@openzeppelin/contracts": "^5.1.0",
     "@thirdweb-dev/contracts": "^3.8.0",
     "chalk": "^4.1.2",
+    "contracts": "link:lib/sstore2/contracts",
     "dotenv": "^16.3.1",
     "hardhat-change-network": "^0.0.7",
     "prompt-sync": "^4.2.0",

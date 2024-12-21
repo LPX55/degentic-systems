@@ -7,7 +7,7 @@ import { IRouterStateGetters } from "../interface/IRouterStateGetters.sol";
 import { BaseRouterStorage } from "../lib/BaseRouterStorage.sol";
 import { ExtensionManager } from "./ExtensionManager.sol";
 import { StringSet } from "../lib/StringSet.sol";
-import "lib/sstore2/contracts/SSTORE2.sol";
+import { SSTORE2 } from "./SSTORE2.sol";
 
 /// @title BaseRouter
 /// @notice A router with an API to manage its extensions.

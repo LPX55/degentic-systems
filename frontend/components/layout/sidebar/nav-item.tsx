@@ -17,7 +17,7 @@ export function NavItem({ item, onClick, basePath, selected }: NavItemProps) {
       className={cn(
         buttonVariants({ variant: "ghost", size: "sm" }),
         selected && "bg-muted",
-        "w-full flex-grow items-center justify-start text-md text-zinc-800 dark:text-zinc-300 px-2.5 py-1",
+        "w-full flex-grow items-center justify-start text-xs text-zinc-800 dark:text-zinc-300 px-2.5 py-1",
         item.disabled && "opacity-50 cursor-not-allowed"
       )}
     >

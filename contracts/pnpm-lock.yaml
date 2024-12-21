@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@dev/dynamic-contracts':
+        specifier: npm:@thirdweb-dev/dynamic-contracts@1.2.5
+        version: '@thirdweb-dev/dynamic-contracts@1.2.5'
       '@openzeppelin/contracts':
         specifier: ^5.1.0
         version: 5.1.0
@@ -17,6 +20,9 @@ importers:
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
+      contracts:
+        specifier: link:lib/sstore2/contracts
+        version: link:lib/sstore2/contracts
       dotenv:
         specifier: ^16.3.1
         version: 16.4.7

@@ -1,6 +1,8 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
 import { ConnectButton } from "thirdweb/react";
-import { darkTheme, useChainMetadata } from "thirdweb/react";
+import { darkTheme, 
+  useSocialProfiles,
+  useActiveAccount, } from "thirdweb/react";
 import {
   inAppWallet,
   InAppWalletConnectionOptions,
@@ -15,12 +17,15 @@ const client = createThirdwebClient({
 const wallets = [
   inAppWallet({
     auth: {
-      options: ["google", "telegram", "x"],
+      options: ["google", "github", "x"],
     },
   }),
   createWallet("io.metamask"),
   createWallet("io.rabby"),
   createWallet("io.zerion.wallet"),
+  createWallet("global.safe"),
+  createWallet("walletConnect"),
+
 ];
   // const { data: chainMetadata } = useChainMetadata(defineChain(16600));
 export function TW() {
@@ -28,6 +33,7 @@ export function TW() {
     <ConnectButton
       client={client}
       wallets={wallets}
+      connectButton={{ label: "Connect" }}
       theme={darkTheme({
         colors: {
           modalBg: "hsl(0, 2%, 9%)",
