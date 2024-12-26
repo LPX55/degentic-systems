@@ -35,6 +35,7 @@
     "deep-chat-react": "^2.0.1",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.1",
+    "framer-motion": "^11.15.0",
     "lucide-react": "^0.378.0",
     "next": "14.2.13",
     "next-themes": "^0.2.1",
@@ -42,7 +43,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.12.7",
-    "tailwind-merge": "^2.5.2",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "thirdweb": "^5.78.0"
   },

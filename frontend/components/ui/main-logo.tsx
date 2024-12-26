@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const LightLogo = () => (
-  <div className="eth-ui">
+  <div className="eth-ui flex items-center gap-2">
 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M12 11.5L17 9L12 6.5L7 9L12 11.5ZM12 11.5V17.5" stroke="#141B34" strokeWidth="1.5" strokeLinejoin="round"/>
   <path d="M17 9V15L12 17.5L7 15V9" stroke="#141B34" strokeWidth="1.5" strokeLinejoin="round"/>
