@@ -8,6 +8,8 @@ import { MobileNav } from './mobile-nav';
 import { ColorModeSwitcher } from '../color-mode-switcher';
 import { TW } from '@/components/connect/connect-btn';
 import { AuthButton } from '@/components/connect/auth-btn';
+import { Button } from '../ui/button';
+import { Link } from 'lucide-react';
 interface HeaderProps {
   items?: {
     title: string;
@@ -38,8 +40,10 @@ export function Header({ items }: HeaderProps) {
           )}
         </div>
         <div className="flex gap-4 items-center">
+          <Button variant="default" className="text-xs hover:cursor-not-allowed text-justify">
+              WHITEPAPER | Q1 2025
+          </Button>
           <ColorModeSwitcher /> 
-          <AuthButton />
         </div>
       </div>
     </header>

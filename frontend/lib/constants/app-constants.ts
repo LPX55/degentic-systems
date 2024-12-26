@@ -9,8 +9,8 @@ export const APP_URL = "https://degentic.com";
 
 // Navigation
 export const NAVIGATION_ITEMS = [
-  { title: "Home", href: "/" },
-  { title: "Ideology", href: "/#ethos" },
-  { title: "Features", href: "/#features" },
+  { title: "WHAT", href: "/" },
+  { title: "WHY", href: "/#ethos" },
+  { title: "HOW", href: "/#features" },
   { title: "Github", href: "https://github.com/LPX55", external: true },
 ];
