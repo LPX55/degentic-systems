@@ -2,6 +2,7 @@ import type { SidebarItem } from "@/lib/types";
 import { NavItem } from "./nav-item";
 import { Separator } from "@/components/ui/separator";
 import { useSegment } from "@/lib/hooks/use-segment";
+import Link from "next/link";
 
 interface SidebarContentProps {
   onNavigate?: () => void;
@@ -16,7 +17,9 @@ export function SidebarContent({ onNavigate, items, sidebarTop, basePath }: Side
   return (
     <div className="sidebar flex flex-col h-full items-stretch">
       <div className="h-14 flex items-center justify-center px-2 shrink-0 mr-10 md:mr-0 border-b">
-        <h2 className="font-mono font-medium tracking-widest"><span className="font-black ">DE</span>|GENTIC SYS.</h2>
+        <Link href="/">
+          <h2 className="font-mono font-medium tracking-widest"><span className="font-black ">DE</span>|GENTIC SYS.</h2>
+        </Link>
       </div>
       <div className="flex flex-grow flex-col gap-2 pt-4 overflow-y-auto">
         {items.map((item, index) => {

@@ -2,10 +2,11 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/layout";
 
 const navigationItems = [
-  { title: "Home", href: "/" },
-  { title: "Ideology", href: "/#ethos" },
-  { title: "Features", href: "/#features" },
-  { title: "Github", href: "https://github.com/LPX55/degentic-systems", external: true },
+  { title: "WHAT", href: "/#what" },
+  { title: "HOW", href: "/#how" },
+  { title: "WHY", href: "/#why" },
+  { title: "WHO", href: "/about" },
+  // { title: "Github", href: "https://github.com/LPX55/degentic-systems", external: true },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
