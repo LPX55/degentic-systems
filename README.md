@@ -1,4 +1,6 @@
-# Degentic Systems PoC | Taipei Blockchain Week 2024
+🛑 Currently active in the `dev` branch. Will observe for now; trying to see if its the RPC, indexer, or myself causing issues this time. 
+
+# Degentic Systems
 
 **Foreword: This frontend is a proof of concept built and completely refactored out of a private monorepo in the scope of a few days... it's the culmination of many months of collective research in the field of contextual grounding and multi-agent systems. Although a lot of effort has been completed on the integration side with 0G Labs' network, the RPC nodes have been acting up and have been unreliable since last night -- this is to be expected on testnets; however, the frontend has been completely disconnected from the backend for the time being and likely will be kept off until more work can be done on the logical planning and design of the platform. The purpose of this hackathon "entry" is to showcase and inspire the communities to think outside the box and not be afraid to have some fun.**
 
