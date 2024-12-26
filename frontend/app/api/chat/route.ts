@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PRIVATE_KEY = process.env.NEXT_PUBLIC_FUNDER_PRIVATE_KEY || "";
-const SERVICE_NAME = "chat-provider-1";
+const SERVICE_NAME = "llama8Bb";
 let openai = new OpenAI({ apiKey: "" });
 let broker: ZGServingNetworkBroker;
 let service: ServiceStructOutput;

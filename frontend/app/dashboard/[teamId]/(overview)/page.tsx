@@ -4,6 +4,7 @@ import { Overview } from "./components/overview";
 import { RecentDebates } from "./components/recent-debates";
 import { ContestStats } from "./components/contest-stats";
 import { Brain, Trophy, Users, MessageSquare } from "lucide-react";
+import { DemoNotice } from './components/DemoNotice';
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <div className="flex-col">
+    
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>

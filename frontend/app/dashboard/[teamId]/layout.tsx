@@ -1,7 +1,7 @@
 "use client";
 
 import SidebarLayout from "@/components/layout/sidebar";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 import { useTeam } from "@/lib/context/team-context";
 import {
   Brain,
@@ -21,7 +21,7 @@ import {
   Swords,
   HardDrive
 } from "lucide-react";
-
+import { NoticeBar } from "@/components/ui/notice-bar";
 const navigationItems = [
   {
     name: "Overview",
@@ -163,6 +163,8 @@ export default function Layout(props: { children: React.ReactNode }) {
   const router = useRouter();
 
   return (
+    <>
+   
     <SidebarLayout 
       items={navigationItems}
       basePath={`/dashboard/${selectedTeam.id}`}
@@ -172,6 +174,8 @@ export default function Layout(props: { children: React.ReactNode }) {
       }]}
     >
       {props.children}
-    </SidebarLayout>
+      </SidebarLayout>
+      { !usePathname().includes("demo") && <NoticeBar /> }
+    </>
   );
 }
